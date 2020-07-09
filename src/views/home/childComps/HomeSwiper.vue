@@ -1,7 +1,7 @@
 <template>
   <swiper>
     <swiper-item :key='index' v-for="(item,index) in banners">
-      <a :href="item.libk">
+      <a :href="item.link">
         <img :src="item.image" alt="">
       </a>
     </swiper-item>
@@ -20,10 +20,23 @@ export default {
 
     }
   },
+  data(){
+    return {
+      isLoad:false
+    }
+  },
   components: {
     Swiper,
     SwiperItem
 
+  },
+  methods: {
+    // imageLoad(){
+    //   if(!this.isLoad) {
+    //     this.$emit('swiperImageLoas')
+    //     this.isLoad=true
+    //   }
+    // }
   }
 }
 </script>
