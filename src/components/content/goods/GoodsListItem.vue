@@ -1,6 +1,7 @@
 <template>
-  <div class="goods-item">
-    <img :src="goodsItem.show.img" alt="">
+  <div class="goods-item" @click="itemClick">
+    <!-- 再Vue里面通过load可以监听图片加载完 -->
+    <img :src="goodsItem.show.img" alt="" @load="imageLoad">
     <div class="goods-info">
       <p>{{goodsItem.title}}</p>
       <span class="price">{{goodsItem.price}}</span>
@@ -17,6 +18,16 @@ export default {
       default(){
         return {}
       }
+    }
+  },
+  methods: {
+    imageLoad(){
+      // 通过事件总线发射出去
+      this.$bus.$emit('itemImageLoad')
+      // console.log('imageload');
+    },
+    itemClick(){
+      this.$router.push('/detail/'+this.goodsItem.iid)   
     }
   }
 }

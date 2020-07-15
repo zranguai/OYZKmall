@@ -38,6 +38,10 @@ export default {
       // console.log(position);
       this.$emit('scroll',position)
     })
+
+    // console.log(this.scroll);
+    
+
     // this.scroll.scrollTo(0,0)
     // 3. 监听上拉事件
     this.scroll.on('pullingUp',()=>{
@@ -52,6 +56,12 @@ export default {
     // 为了解决加载一次后不再加载问题更多
     finishPullUp(){
       this.scroll.finishPullUp()
+    },
+    refresh(){
+      this.scroll.refresh()
+    },
+    getScrollY(){
+      return this.scroll ? this.scroll.y : 0
     }
   }
 }

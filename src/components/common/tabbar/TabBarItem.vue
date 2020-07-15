@@ -28,6 +28,7 @@
         // /home -> item1(/category) = false
         // /home -> item1(/cart) = true
         // /home -> item1(/profile) = true
+        // indexOf()方法返回在数组中可以找到一个给定元素的第一个索引，如果不存在，则返回-1
         return this.$route.path.indexOf(this.path) !== -1
       },
       activeStyle() {
