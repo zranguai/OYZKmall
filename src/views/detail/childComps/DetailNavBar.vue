@@ -30,9 +30,10 @@ export default {
   methods: {
     titleClick(index){
       this.currentIndex = index
+      this.$emit('titleClick',index)
     },
     backClick(){
-      this.$router.go(-1)
+      this.$router.back()   // 疑问？ go(-1)为啥有时候会直接返回顶部
     }
   },
 }
