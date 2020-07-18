@@ -12,6 +12,7 @@
     </scroll>
     <back-top @click.native="backTop" v-show="isShowBackTop"/>
     <detail-bottom-bar @addToCart='addToCart'/>
+    <toast message='购物车添加成功' :show='show'/>
   </div>
 </template>
 <script>
@@ -27,6 +28,7 @@ import DetailBottomBar from './childComps/DetailBottomBar'
 import Scroll from 'components/common/scroll/Scroll'
 import GoodsList from 'components/content/goods/GoodsList'
 import BackTop from 'components/content/backTop/BackTop'
+import Toast from 'components/common/toast/Toast'
 
 // import backTopMixin from 'common/mixin'
 import {getDetail, Goods, Shop,GoodsParam,getRecommend} from 'network/detail.js';
@@ -45,7 +47,8 @@ import {getDetail, Goods, Shop,GoodsParam,getRecommend} from 'network/detail.js'
 
       Scroll,
       GoodsList,
-      BackTop
+      BackTop,
+      Toast
     },
     // mixins: [backTopMixin],
     data(){
@@ -60,7 +63,8 @@ import {getDetail, Goods, Shop,GoodsParam,getRecommend} from 'network/detail.js'
         recommends: [],
         themeTopYs: [],
         currentIndex:0,
-        isShowBackTop: false
+        isShowBackTop: false,
+        show: false
       }
     },
     created(){
@@ -161,8 +165,13 @@ import {getDetail, Goods, Shop,GoodsParam,getRecommend} from 'network/detail.js'
         product.price = this.goods.realPrice;
         product.iid = this.iid;
         // 2.将商品添加到购物车
+        console.log('添加成功');
+        
         this.$store.commit('addCart',product)
-
+        this.show = true;
+        setTimeout(() => {
+          this.show = false
+        },1500)
       }
     }
   }

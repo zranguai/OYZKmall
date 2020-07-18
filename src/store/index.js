@@ -11,21 +11,23 @@ const store = new vuex.Store({
     cartList: []
   },
   mutations: {
+
     addCart(state,payload) {
       // payload为新添加的商品
-      let oldProduct = null;
-      for(let item of state.cartList){
-        if(item.iid === payload.iid) {
-          oldProduct = item;
+        let oldProduct = null;
+        for(let item of state.cartList){
+          if(item.iid === payload.iid) {
+            oldProduct = item;
+          }
         }
-      }
-      // let oldProduct = state.cartList.find(item => item.iid === payload.iid)
-      if(oldProduct){
-        oldProduct.count += 1
-      } else {
-        payload.count = 1
-        state.cartList.push(payload)
-      }
+        // let oldProduct = state.cartList.find(item => item.iid === payload.iid)
+        if(oldProduct){
+          oldProduct.count += 1
+        } else {
+          payload.checked = true   // 放在push前面 先把属性改了之后再添加上去
+          payload.count = 1
+          state.cartList.push(payload)
+        }
     }
   },
   getters
