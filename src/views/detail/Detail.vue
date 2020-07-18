@@ -10,6 +10,8 @@
       <detail-comment-info ref="comment" :comment-info='commentInfo'></detail-comment-info>
       <goods-list ref="recommend" :goods='recommends'/>
     </scroll>
+    <back-top @click.native="backTop" v-show="isShowBackTop"/>
+    <detail-bottom-bar @addToCart='addToCart'/>
   </div>
 </template>
 <script>
@@ -20,11 +22,15 @@ import DetailShopInfo from './childComps/DetailShopInfo'
 import DetailGoodsInfo from './childComps/DetailGoodsInfo'
 import DetailParamInfo from './childComps/DetailParamInfo'
 import DetailCommentInfo from './childComps/DetailCommentInfo'
+import DetailBottomBar from './childComps/DetailBottomBar'
 
 import Scroll from 'components/common/scroll/Scroll'
 import GoodsList from 'components/content/goods/GoodsList'
+import BackTop from 'components/content/backTop/BackTop'
 
-import {getDetail, Goods, Shop,GoodsParam,getRecommend} from 'network/detail.js'
+// import backTopMixin from 'common/mixin'
+import {getDetail, Goods, Shop,GoodsParam,getRecommend} from 'network/detail.js';
+  
   export default {
     name: 'Detail',
     components: {
@@ -35,10 +41,13 @@ import {getDetail, Goods, Shop,GoodsParam,getRecommend} from 'network/detail.js'
       DetailGoodsInfo,
       DetailParamInfo,
       DetailCommentInfo,
+      DetailBottomBar,
 
       Scroll,
-      GoodsList
+      GoodsList,
+      BackTop
     },
+    // mixins: [backTopMixin],
     data(){
       return {
         iid: null,
@@ -50,7 +59,8 @@ import {getDetail, Goods, Shop,GoodsParam,getRecommend} from 'network/detail.js'
         commentInfo: {},
         recommends: [],
         themeTopYs: [],
-        currentIndex:0
+        currentIndex:0,
+        isShowBackTop: false
       }
     },
     created(){
@@ -95,12 +105,6 @@ import {getDetail, Goods, Shop,GoodsParam,getRecommend} from 'network/detail.js'
         this.recommends = res.data.list
       })
     },
-    mounted(){
-      
-    },
-    updated(){
-
-    },
     methods: {
       imageLoad(){
         this.$refs.scroll.refresh()
@@ -109,23 +113,56 @@ import {getDetail, Goods, Shop,GoodsParam,getRecommend} from 'network/detail.js'
           this.themeTopYs.push(this.$refs.params.$el.offsetTop)
           this.themeTopYs.push(this.$refs.comment.$el.offsetTop)
           this.themeTopYs.push(this.$refs.recommend.$el.offsetTop)
-          console.log(this.themeTopYs);
+          this.themeTopYs.push(Number.MAX_VALUE)
+          // console.log(this.themeTopYs);
       },
       titleClick(index){
         // console.log(index);
         this.$refs.scroll.scrollTo(0,-this.themeTopYs[index],500)
       },
+      backTop() {
+        this.$refs.scroll.scrollTo(0,0,300)
+      },
       contentScroll(position){
         // 1.获取y值
         const positionY = -position.y
+        //顶部导航联动效果
         // 2.positionY和主题值进行对比
+        // [0,7938,9120,9452]
+
+        // positionY 在 0到7938之间 index=0
+        // positionY 在 7938到9120之间 index=1
+
+        // positionY 在 9120到9452之间 index=2
         let length = this.themeTopYs.length
-        for(let i=0;i < length;i++){
-          if(this.currentIndex !== i &&((i < length-1 && positionY >= this.themeTopYs[i] && positionY < this.themeTopYs[i+1]) || (i===length - 1 && positionY >= this.themeTopYs[i]))){
+        // 做法一（普通做法）
+        // for(let i=0;i < length;i++){
+        //   if(this.currentIndex !== i &&((i < length-1 && positionY >= this.themeTopYs[i] && positionY < this.themeTopYs[i+1]) || (i===length - 1 && positionY >= this.themeTopYs[i]))){
+        //     this.currentIndex = i;
+        //     this.$refs.nav.currentIndex = this.currentIndex
+        //   }
+        // }
+        // 做法二（hack做法）
+        for(let i=0;i < length-1;i++){
+          if(this.currentIndex !==i && (positionY >= this.themeTopYs[i] &&positionY < this.themeTopYs[i+1])) {
             this.currentIndex = i;
             this.$refs.nav.currentIndex = this.currentIndex
           }
         }
+        // 3.是否显示回到顶部
+        this.isShowBackTop = -position.y > 1000
+      },
+      addToCart(){
+        //1.获取购物车需要展示的信息
+        const product = {}
+        product.image = this.topImages[0];
+        product.title = this.goods.title;
+        product.desc = this.goods.desc;
+        product.price = this.goods.realPrice;
+        product.iid = this.iid;
+        // 2.将商品添加到购物车
+        this.$store.commit('addCart',product)
+
       }
     }
   }
@@ -143,6 +180,6 @@ import {getDetail, Goods, Shop,GoodsParam,getRecommend} from 'network/detail.js'
     background-color: #fff;
   }
   .content {
-    height: calc(100% - 44px);
+    height: calc(100% - 44px - 49px);
   }
 </style>
