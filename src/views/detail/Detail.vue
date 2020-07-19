@@ -165,7 +165,7 @@ import {getDetail, Goods, Shop,GoodsParam,getRecommend} from 'network/detail.js'
         product.price = this.goods.realPrice;
         product.iid = this.iid;
         // 2.将商品添加到购物车
-        console.log('添加成功');
+        // console.log('添加成功');
         
         this.$store.commit('addCart',product)
         this.show = true;
