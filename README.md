@@ -1,29 +1,23 @@
-# supermail1
+# OYZKmail
 
-## Project setup
+## 起步
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 开启服务器
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### 打包
 ```
 npm run build
 ```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+###项目思路图
+![01](src/assets/img/outline/01.jpg)
+![01](src/assets/img/outline/02.jpg)
+![01](src/assets/img/outline/03.jpg)
+![01](src/assets/img/outline/04.jpg)
+![01](src/assets/img/outline/05.jpg)
+![01](src/assets/img/outline/06.jpg)
